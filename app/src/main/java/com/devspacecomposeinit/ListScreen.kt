@@ -25,23 +25,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
-fun ArtistListScreen() {
+fun ArtistListScreen(navController: NavController) {
     val repository = ListRepository()
     val artists = repository.getArtistList()
 
-    ArtistList(artistList = artists)
+    ArtistList(artistList = artists) { artist ->
+
+        navController.navigate("artistDetail/${artist.id}")
+
+    }
 }
 
 @Composable
-private fun ArtistList(artistList: List<Artist>) {
+private fun ArtistList(
+    artistList: List<Artist>,
+    onClick: (Artist) -> Unit
+) {
     LazyColumn {
         items(artistList) { artist ->
             ArtistCard(
                 artist = artist,
                 onClick = {
-
+                    onClick.invoke(artist)
                 }
             )
 
