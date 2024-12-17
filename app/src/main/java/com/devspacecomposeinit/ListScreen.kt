@@ -21,25 +21,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.devspacecomposeinit.designsystem.TitleLargeText
 import com.devspacecomposeinit.designsystem.TitleSmallText
 
+const val ARTIST_LIST_NAME_TAG = "ARTIST_LIST_NAME_TAG"
+const val ARTIST_LIST_LAST_SEE_TAG = "ARTIST_LIST_LAST_SEE_TAG"
+
 @Composable
 fun ArtistListScreen(navController: NavController) {
     val repository = ListRepository()
     val artists = repository.getArtistList()
 
-        ArtistList(artistList = artists) { artist ->
+        ArtistListContent(artistList = artists) { artist ->
             navController.navigate("artistDetail/${artist.id}")
 
         }
     }
 
 @Composable
-private fun ArtistList(
+fun ArtistListContent(
     artistList: List<Artist>,
     onClick: (Artist) -> Unit
 ) {
@@ -86,9 +90,11 @@ fun ArtistCard(
             Spacer(modifier = Modifier.size(16.dp))
             Column {
                 TitleSmallText(
+                    modifier = Modifier.testTag(ARTIST_LIST_NAME_TAG + artist.id),
                     text = artist.name
                 )
                 Text(
+                    modifier = Modifier.testTag(ARTIST_LIST_LAST_SEE_TAG + artist.id),
                     text = artist.lastSeenOnline,
                     color = Color.Gray
                 )
